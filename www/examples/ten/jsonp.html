@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自定义jsonp接口</title>
+</head>
+<body>
+<input type="button" value="加载" id="btn">
+<div id="Data"></div>
+<script>
+    btn = document.getElementById("btn");
+    function callback(data) {
+       btn.onclick = function(){
+            console.log(data);
+            document.getElementById('Data').innerHTML=data;
+        }
+    }
+</script>
+<script type="text/javascript" src="jsonp.php?_jsonp=callback"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>原生ajax创建xhr对象</title>
+    <script type="text/javascript">
+        window.onload = function() {
+            var btn = document.getElementById('btn');
+            btn.onclick = function() {
+                //第一步：创建xhr对象
+                var xhr = null;
+                if(window.XMLHttpRequest) {
+                    xhr = new XMLHttpRequest();//标准了浏览器
+                }else {
+                    xhr = new ActiveXObject('Microsoft.XMLHTTP');//IE6及以下浏览器
+                }
+                var username = document.getElementById('username').value;
+                var password = document.getElementById('password').value;
+                //第二步：准备发送请求，配置发送请求的一些行为
+//                var url = 'form.php?username='+username+'&password='+password;
+                var url = 'form.php';
+                xhr.open('post',url,true);//true表示异步加载，false表示同步加载
+                // 第三部：执行发送的动作
+                xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+                var param = 'username='+username+'&password='+password;
+                xhr.send(param);
+//                xhr.send(null);
+                //第四步：指定一些回调函数
+                xhr.onreadystatechange = function() {
+                    if(xhr.readyState == 4){
+                        if(xhr.status == 200){
+                            //两种数据格式
+                            var data = xhr.responseText;//json
+//                            var data = xhr.responseXML;
+                            console.log(data);
+                            document.getElementById('showInfo').innerHTML= data;
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+<div>
+    <div id="showInfo"></div>
+    <form>
+        用户名：<input type="text" name="username" id="username"><br>
+        密码：<input type="password" name="password" id="password"><br>
+        <input type="button" value="提交" id="btn">
+    </form>
+</div>
+</body>
+</html>

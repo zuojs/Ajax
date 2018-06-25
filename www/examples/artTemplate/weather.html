@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Template应用</title>
+    <style type="text/css">
+        *{
+            margin:0;
+            padding:0;
+        }
+        .border {
+            padding: 10px;
+            border: 5px solid #4da9d4;
+            border-radius: 5px;
+            width: 980px;
+            margin: 20px auto;
+        }
+        div#title{
+            position: relative;
+            width: 980px;
+            height: 50px;
+        }
+        div h1 {
+            font-family: Tahoma,Helvetica,Arial,'宋体',sans-serif;
+            background-color: #ccc;
+            line-height: 50px;
+            text-align: center;
+        }
+        #div1{
+            position:relative;
+            background: #90ee9066;
+            width: 980px;
+            height: 900px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+        #div1 select{
+            margin-left : 445px;
+            margin-top : 10px;
+            height: 30px;
+        }
+        #div1 input{
+            height: 30px;
+        }
+        #div1 div{
+            width: 980px;
+            background: lightBlue;
+            border-bottom: red solid 1px;
+        }
+        #div1 div ul li{
+            list-style-type: none;
+            padding-left: 10px;
+            text-align: center;
+        }
+    </style>
+    <script src="jquery-1.11.2.js"></script>
+    <script src="template.js"></script>
+    <script id="artid" type="text/html">
+        {{if weather}}
+            {{each weather as value}}
+                <div>
+                    <span>日期：{{value.date}}</span>
+                    <ul>
+                        <li>白天天气：{{value.info.day[1]}}</li>
+                        <li>白天温度：{{value.info.day[2]}}</li>
+                        <li>白天风向：{{value.info.day[3]}}</li>
+                        <li>白天风速：{{value.info.day[4]}}</li>
+                    </ul>
+                    <ul>
+                        <li>夜间天气：{{value.info.night[1]}}</li>
+                        <li>夜间温度：{{value.info.night[2]}}</li>
+                        <li>夜间风向：{{value.info.night[3]}}</li>
+                        <li>夜间风速：{{value.info.night[4]}}</li>
+                    </ul>
+                </div>
+            {{/each}}
+        {{/if}}
+    </script>
+    <script type="text/javascript">
+        function callback(data){
+            var html = template('artid',data);
+            $("#info").html(html);
+        }
+
+        window.onload = function(){
+            var city = document.getElementById('city');
+            city.onchange = function(){                        //改变事件
+                document.getElementById('info').innerHTML = '';
+            }
+            var btn = document.getElementById('btn');
+
+            btn.onclick = function(){
+                var cityCode = city.value;
+                var url = 'http://tq.360.cn/api/weatherquery/querys?app=tq360&_jsonp=callback&code='+city.value;//接口的回调函数名字自定义，例如_jsonp=abc
+                var script = document.createElement('script');
+                script.src = url;
+                document.body.appendChild(script);
+            }
+
+        }
+    </script>
+</head>
+<body>
+<div class="border">
+    <div id="title"><h1>一周天气预报</h1></div>
+    <div id="div1">
+        <select id="city">
+            <option value="101220101">合肥</option>
+            <option value="101221601">巢湖</option>
+            <option value="101221602">庐江</option>
+            <option value="101220602">枞阳</option>
+            <option value="101010100">北京</option>
+            <option value="101020100">上海</option>
+        </select>
+        <input type="button" value="查看天气" id="btn">
+        <div id="info"><h1>送给可爱的大宝<br>(｡◕ˇ∀ˇ◕)╭❤～</h1></div>
+    </div>
+</div>
+</body>
+</html>

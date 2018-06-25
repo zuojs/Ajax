@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../../../jquery-3.3.1.js"></script>
+    <script>
+        $(function() {
+            $("button").click(function () {
+                $.ajax({                   //获取xml
+                    url: 'ajax.xml',       //禁用缓存$.post()方法是默认的,get需要用时间戳，$.get('ajax.xml'+(+new Date),function(xml){...}),
+                    type: 'GET',           // $ajax()方法需要用cache：false;
+                    dataType: 'xml',
+                    timeout: 1000,
+                    cache: false,
+                    error: function (xml) {
+                        alert('加载xml文档出错');
+                    },
+                    success: function (xml) {             //解析xml
+                        var frag = $("<ul/>");
+                        $(xml).find("student").each(function (i) {
+                            var id = $(this).children("id");
+                            var id_value = id.text();
+                            var email = $(this).attr("email");
+                            frag.append("<li>" + id_value + "_" + email + "</li>");
+                        });
+                        frag.appendTo("#load");
+                    }
+                });
+            });
+            $("#loading").ajaxStart(function(){
+                $(this).show();
+            });
+            $("#loading").ajaxStop(function(){
+                $(this).hide();
+            });
+        })
+    </script>
+</head>
+<body>
+<div id="#loading">加载中....</div>
+<button>加载</button>
+<div id="load"></div>
+</body>
+</html>
